@@ -86,9 +86,17 @@ allprojects {
             'lib/security/public_suffix_list.dat'
             ];
 
+        def baseJvmFeatures = ['zgc']
+
+        if (project.hasProperty("variant") && project.getProperty('variant') == 'minimal') {
+            // For minimal variant, add management features and set variant
+            baseJvmFeatures += 'management'
+            correttoCommonFlags += ['--with-jvm-variants=minimal']
+        }
+        
         correttoCommonFlags = [
                 "--with-freetype=bundled",
-                '--with-jvm-features=zgc,management',
+                "--with-jvm-features=${baseJvmFeatures.join(',')}",
                 "--with-version-build=${project.version.build}",
                 '--with-version-pre=',
                 "--with-vendor-bug-url=https://github.com/corretto/corretto-${project.version.major}/issues/",
