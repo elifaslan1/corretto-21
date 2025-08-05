@@ -87,12 +87,6 @@ allprojects {
             ];
 
         def baseJvmFeatures = ['zgc']
-
-        if (project.hasProperty("variant") && project.getProperty('variant') == 'minimal') {
-            // For minimal variant, add management features and set variant
-            baseJvmFeatures += 'management'
-            correttoCommonFlags += ['--with-jvm-variants=minimal']
-        }
         
         correttoCommonFlags = [
                 "--with-freetype=bundled",
@@ -105,6 +99,12 @@ allprojects {
                 '--with-vendor-url=https://aws.amazon.com/corretto/',
                 "--with-vendor-version-string=Corretto-${project.version.full}"
         ]
+
+        if (project.hasProperty("variant") && project.getProperty('variant') == 'minimal') {
+            // For minimal variant, add management features and set variant
+            baseJvmFeatures += 'management'
+            correttoCommonFlags += ['--with-jvm-variants=minimal']
+        }
 
         // Add headless support
         is_headless = project.hasProperty("headless") ? Boolean.parseBoolean(project.getProperty('headless')) : false
